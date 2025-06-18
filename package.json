@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google/genai": "^1.5.1",
     "@octokit/auth-app": "^8.0.1",
     "@octokit/request": "^10.0.2",
     "next": "15.3.3",

@@ -1,6 +1,7 @@
 import { getPRDiff, postPRComment } from "@/app/lib/github";
-import openai from "@/app/lib/openai";
+// import openai from "@/app/lib/openai";
 import { NextResponse } from "next/server";
+import Gemini from "../lib/gemini";
 
 export const runAIReview = async ({
   installationID,
@@ -18,24 +19,41 @@ export const runAIReview = async ({
     const diff = await getPRDiff({ installationID, owner, repo, pull_number });
 
     console.log("🔃 Calling API.");
-    const aiReview = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
+    
+    // const aiReview = await openai.chat.completions.create({  //  🚀  OpenAI
+    //   model: "gpt-4o",
+    //   messages: [
+    //     {
+    //       role: "system",
+    //       content:
+    //         "You are a senior code reviewer. Identify bugs, improvements, and security risks.",
+    //     },
+    //     { role: "user", content: diff },
+    //   ],
+    // });
+    
+    // const commentBody = aiReview.choices[0].message.content;
+ 
+    const aiReview = await Gemini.models.generateContent({ //  🚀  Gemini
+      model: "gemini-1.5-pro",
+      contents: [
         {
-          role: "system",
-          content:
-            "You are a senior code reviewer. Identify bugs, improvements, and security risks.",
+          role: "user",
+          parts: [
+            { text: "You are a senior code reviewer. Identify bugs, improvements, and security risks." },
+            { text: diff },
+          ],
         },
-        { role: "user", content: diff },
       ],
     });
-
-    const commentBody = aiReview.choices[0].message.content;
+    
+    const commentBody = aiReview.text;
 
     if (!commentBody) {
       return NextResponse.json({ msg: "API Result Error." }, { status: 500 });
     }
     console.log("✅ Result given by API.");
+    console.log("🔥🔥", commentBody)
 
     const comment = await postPRComment({
       installationID,
@@ -49,7 +67,7 @@ export const runAIReview = async ({
       return NextResponse.json({ msg: "Error in comment" }, { status: 500 });
     }
     console.log("✅ Review Completed.");
-    return { diffSize: diff.length, commentBody };
+    return { diffSize: diff.length, diff: diff, commentBody };
   } catch (error) {
     console.log(error)
     return NextResponse.json({ msg: "Error" }, { status: 500 });

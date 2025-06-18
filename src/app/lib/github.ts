@@ -9,9 +9,8 @@ export const getInstallationToken = async (installationID: number) => {
   const auth = createAppAuth({
     appId,
     privateKey,
-    installationID,
   });
-  const { token } = await auth({ type: "installation" });
+  const { token } = await auth({ type: "installation", installationId: installationID });
   console.log("✅ Token generated");
   return token;
 };
@@ -50,6 +49,7 @@ export const getPRDiff = async ({
   });
 
   const diff = await diffResponse.text();
+  console.log("🔥🔥 \n", diff)
   console.log("✅ Diff Got.");
   return diff;
 };
