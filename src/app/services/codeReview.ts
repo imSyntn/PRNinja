@@ -35,7 +35,7 @@ export const runAIReview = async ({
     // const commentBody = aiReview.choices[0].message.content;
  
     const aiReview = await Gemini.models.generateContent({ //  🚀  Gemini
-      model: "gemini-1.5-pro",
+      model: "gemini-2.5-flash",
       contents: [
         {
           role: "user",
