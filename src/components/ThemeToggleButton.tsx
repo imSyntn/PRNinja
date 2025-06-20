@@ -1,13 +1,20 @@
 "use client";
 
+import React, {useState, useEffect} from "react";
 import { useTheme } from "next-themes";
-import React from "react";
 import { Button } from "./ui/button";
 import { Moon, Sun } from "lucide-react";
 
 const ThemeToggleButton = ({ className }: { className?: string }) => {
   const { theme, setTheme } = useTheme();
+  const [isMounted, setIsMounted] = useState<boolean>(false)
 
+  useEffect(()=> {
+    setIsMounted(true)
+  },[])
+
+  if(!isMounted) return null;
+  
   return (
     <Button
       variant="ghost"

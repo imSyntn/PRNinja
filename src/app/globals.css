@@ -120,3 +120,26 @@
     @apply bg-background text-foreground;
   }
 }
+
+.animated-text {
+  /* font-size: 48px; */
+  font-weight: bold;
+  background: linear-gradient(135deg, #FF0080, #7928CA, #0070F3, #38bdf8, #FF0080);
+  background-size: 300% 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: text-gradient-move 4s ease infinite;
+}
+
+@keyframes text-gradient-move {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
