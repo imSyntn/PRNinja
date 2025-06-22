@@ -13,16 +13,24 @@ import {
   NavbarButton,
 } from "@/components/ui/resizable-navbar";
 import ThemeToggleButton from "./ThemeToggleButton";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const navItems = [
+  { name: "Home", link: "/" },
+  { name: "How It Works", link: "#how-it-works" },
+  { name: "Features", link: "#feature-section" },
+  { name: "Pricing", link: "#pricing-section" },
+  { name: "Contact", link: "/contact" },
+];
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathName = usePathname();
 
-  const navItems = [
-    { name: "Home", link: "/" },
-    { name: "About", link: "/about" },
-    { name: "Projects", link: "/projects" },
-    { name: "Contact", link: "/contact" },
-  ];
+  if (pathName.includes("/dashboard")) {
+    return null;
+  }
 
   return (
     <Navbar className="top-5">
@@ -35,8 +43,8 @@ export default function Header() {
           <NavbarButton variant="secondary">
             <ThemeToggleButton />
           </NavbarButton>
-          <NavbarButton href="#get-started" variant="primary">
-            Login
+          <NavbarButton href="/get-started" variant="primary" as={Link}>
+            Get Started
           </NavbarButton>
         </div>
       </NavBody>
@@ -62,10 +70,10 @@ export default function Header() {
             </a>
           ))}
           <div className="flex">
-            <NavbarButton variant="secondary" className="py-0" >
+            <NavbarButton variant="secondary" className="py-0">
               <ThemeToggleButton />
             </NavbarButton>
-            <NavbarButton href="#get-started" variant="primary">
+            <NavbarButton href="/get-started" variant="primary" as={Link}>
               Get Started
             </NavbarButton>
           </div>

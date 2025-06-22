@@ -1,7 +1,7 @@
 import React from "react";
 import { Github, GitPullRequestArrow, Zap } from "lucide-react";
-import { CardDataType } from "@/types/app";
-import Card from "../Card";
+import { CardDataType } from "@/types/home";
+import FeatureCard from "./FeatureCard";
 
 const howItWorksSteps: CardDataType[] = [
   {
@@ -9,32 +9,36 @@ const howItWorksSteps: CardDataType[] = [
     title: "Connect your GitHub",
     description: "Authorize PRNinja in one click. No setup hassles.",
     gradient: "from-blue-500 to-indigo-600",
-    background: "from-blue-500/20 to-indigo-600/20",
+    background: "from-blue-500/50 to-indigo-600/50",
   },
   {
     icon: GitPullRequestArrow,
     title: "Submit your PR",
     description: "Create a pull request — PRNinja automatically reviews it.",
     gradient: "from-violet-500 to-purple-600",
-    background: "from-violet-500/20 to-purple-600/20",
+    background: "from-violet-500/50 to-purple-600/50",
   },
   {
     icon: Zap,
     title: "Get instant feedback",
-    description:
-      "AI review comments for your PR — clear and actionable.",
+    description: "AI review comments for your PR — clear and actionable.",
     gradient: "from-emerald-500 to-teal-600",
-    background: "from-emerald-500/20 to-teal-600/20",
+    background: "from-emerald-500/50 to-teal-600/50",
   },
 ];
 const HowItWorks = () => {
   return (
-    <div className="min-h-[100vh] w-full flex flex-col justify-center items-center gap-10 px-12">
-      <h2 className="text-5xl font-bold">How it works</h2>
-      <p className="text-2xl">Get started with AI-powered code reviews in three simple steps.</p>
+    <div id="how-it-works" className="min-h-[100vh] w-full flex flex-col justify-center items-center gap-10 px-12">
+      <div className="w-full text-center mb-10">
+        <h2 className="text-5xl font-bold mb-5">How it works</h2>
+        <p className="text-2xl">
+          Get started with AI-powered code reviews in three simple steps.
+        </p>
+      </div>
+
       <div className="w-full flex justify-evenly flex-wrap gap-2.5">
         {howItWorksSteps.map((item, idx) => (
-          <Card key={idx} item={item} />
+          <FeatureCard key={idx} item={item} />
         ))}
       </div>
     </div>

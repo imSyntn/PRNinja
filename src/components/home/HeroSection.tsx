@@ -17,7 +17,7 @@ const HeroSection = () => {
         className=""
       />
       <h1 className="text-7xl font-bold text-center">
-        Code <span className="animated-text dark:animated-text-dark">Reviews,</span>
+        Code <span className="animated-text">Reviews,</span>
         <br />
         Powered by AI.
       </h1>

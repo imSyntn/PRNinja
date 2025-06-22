@@ -1,24 +1,32 @@
 "use client";
 
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { Button } from "./ui/button";
 import { Moon, Sun } from "lucide-react";
 
-const ThemeToggleButton = ({ className }: { className?: string }) => {
+const ThemeToggleButton = ({
+  className,
+  text,
+  size
+}: {
+  className?: string;
+  text?: string;
+  size?: "default" | "sm" | "lg" | "icon";
+}) => {
   const { theme, setTheme } = useTheme();
-  const [isMounted, setIsMounted] = useState<boolean>(false)
+  const [isMounted, setIsMounted] = useState<boolean>(false);
 
-  useEffect(()=> {
-    setIsMounted(true)
-  },[])
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
-  if(!isMounted) return null;
-  
+  if (!isMounted) return null;
+
   return (
     <Button
       variant="ghost"
-      size="icon"
+      size={size ? size : "icon"}
       className={`cursor-pointer ${className}`}
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
     >
@@ -27,6 +35,7 @@ const ThemeToggleButton = ({ className }: { className?: string }) => {
       ) : (
         <Moon className="h-5 w-5 text-neutral-800" />
       )}
+      {text}
     </Button>
   );
 };

@@ -41,6 +41,22 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --animate-rainbow: rainbow var(--speed, 2s) infinite linear;
+  --color-color-5: var(--color-5);
+  --color-color-4: var(--color-4);
+  --color-color-3: var(--color-3);
+  --color-color-2: var(--color-2);
+  --color-color-1: var(--color-1);
+
+  @keyframes rainbow {
+    0% {
+      background-position: 0%;
+    }
+
+    100% {
+      background-position: 200%;
+    }
+  }
 }
 
 :root {
@@ -76,6 +92,11 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --color-1: oklch(66.2% 0.225 25.9);
+  --color-2: oklch(60.4% 0.26 302);
+  --color-3: oklch(69.6% 0.165 251);
+  --color-4: oklch(80.2% 0.134 225);
+  --color-5: oklch(90.7% 0.231 133);
 }
 
 .dark {
@@ -110,15 +131,57 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --color-1: oklch(66.2% 0.225 25.9);
+  --color-2: oklch(60.4% 0.26 302);
+  --color-3: oklch(69.6% 0.165 251);
+  --color-4: oklch(80.2% 0.134 225);
+  --color-5: oklch(90.7% 0.231 133);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #ffffff #33333300;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #ffffff;
+  border-radius: 10px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #c0a0b9;
+}
+
+html.dark .scrollbar::-webkit-scrollbar-thumb {
+  background: #000000;
+}
+
+html.dark .scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #303030;
 }
 
 .animated-text {
@@ -132,13 +195,20 @@
   animation: text-gradient-move 4s ease infinite;
 }
 
+.animated-button {
+  background-size: 300% 300%;
+  animation: text-gradient-move 4s ease infinite;
+}
+
 @keyframes text-gradient-move {
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }

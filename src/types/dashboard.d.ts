@@ -1,0 +1,21 @@
+export interface PRReviewDataType {
+  id: string;
+  repo: string;
+  title: string;
+  status: "Reviewed" | "Issues Found" | "Pending";
+  suggestions: number;
+  link: string;
+  date: string;
+};
+
+export type ConnectedRepoType = {
+  id: number;
+  name: string;
+  full_name: string;
+  description: string;
+  permissions: {
+    pulls: string;
+    metadata: string;
+  };
+  private: boolean;
+};
