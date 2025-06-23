@@ -11,7 +11,7 @@ const HeroSection = () => {
       />
 
       <TailwindGradiwntButton
-        text="🚀 Now available on GitHub Marketplace"
+        text="🚀 Now available on GitHub Apps"
         as="a"
         href="https://github.com/apps/pr-ninja"
         className=""

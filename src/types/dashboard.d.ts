@@ -3,7 +3,7 @@ export interface PRReviewDataType {
   repo: string;
   title: string;
   status: "Reviewed" | "Issues Found" | "Pending";
-  suggestions: number;
+  suggestions: string;
   link: string;
   date: string;
 };

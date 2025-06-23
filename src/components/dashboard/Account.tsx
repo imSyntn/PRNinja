@@ -5,8 +5,10 @@ import { Button } from "../ui/button";
 import Image from "next/image";
 import AlertButton from "./AlertButton";
 import { Badge } from "../ui/badge";
+import { Session } from "next-auth";
 
-const Account = () => {
+const Account = ({ data }: { data: Session }) => {
+
   return (
     <div id="account" className="my-10 h-full">
       <h2 className="text-2xl font-bold mb-5">Account</h2>
@@ -15,6 +17,7 @@ const Account = () => {
         <div className="">
           <Image
             src={
+              data.user.image ||
               "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740"
             }
             width={100}
@@ -29,7 +32,7 @@ const Account = () => {
             Name:
           </Label>
           <div className="flex w-full max-w-sm items-center gap-3">
-            <Input type="text" placeholder="Sayantan Sarkar" />
+            <Input type="text" placeholder={data.user.name || "Add name."} />
             <Button type="submit" variant="outline" className="cursor-pointer">
               Change
             </Button>
@@ -41,7 +44,7 @@ const Account = () => {
             type="email"
             disabled
             id="email"
-            placeholder="ssayantan84@gmail.com"
+            placeholder={data.user.email || ""}
             className="max-w-sm"
           />
         </div>
@@ -59,7 +62,9 @@ const Account = () => {
           Free
         </Badge>
       </p>
-      <Button className="ml-6 cursor-pointer bg-gradient-to-r from-teal-400 to-yellow-200 text-black animated-button ">Upgrade to PRO 🚀</Button>
+      <Button className="ml-6 cursor-pointer bg-gradient-to-r from-teal-400 to-yellow-200 text-black animated-button ">
+        Upgrade to PRO 🚀
+      </Button>
 
       {/*  */}
 

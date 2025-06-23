@@ -7,9 +7,13 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "**.freepik.com",
       },
+      {
+        protocol: "https",
+        hostname: "**.githubusercontent.com",
+      },
     ],
   },
-  devIndicators: false
+  // devIndicators: false
 };
 
 export default nextConfig;

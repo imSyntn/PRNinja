@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/table";
 import { PRReviewDataType } from "@/types/dashboard";
 import { ExternalLink } from "lucide-react";
+import Modal from "./Modal";
 
 export const prReviews: PRReviewDataType[] = [
   {
@@ -17,8 +18,9 @@ export const prReviews: PRReviewDataType[] = [
     repo: "prninja/core-api",
     title: "Fix user auth & token refresh",
     status: "Issues Found",
-    suggestions: 4,
-    link:"#",
+    suggestions:
+      "djdsfjsdfdsjkdjfjsdjfdjkfjkdfjkdsjkfdjsnfjkdsnfjkdsnfjkndfjdsfnjkdsnjkdsnfjndn",
+    link: "#",
     date: "2025-06-21",
   },
   {
@@ -26,8 +28,9 @@ export const prReviews: PRReviewDataType[] = [
     repo: "sayantan66/test-repo",
     title: "Add ESLint and Prettier config",
     status: "Reviewed",
-    suggestions: 0,
-    link:"#",
+    suggestions:
+      "djdsfjsdfdsjkdjfjsdjfdjkfjkdfjkdsjkfdjsnfjkdsnfjkdsnfjkndfjdsfnjkdsnjkdsnfjndn",
+    link: "#",
     date: "2025-06-19",
   },
   {
@@ -35,8 +38,9 @@ export const prReviews: PRReviewDataType[] = [
     repo: "prninja/client-ui",
     title: "Improve dark mode contrast",
     status: "Pending",
-    suggestions: 0,
-    link:"#",
+    suggestions:
+      "djdsfjsdfdsjkdjfjsdjfdjkfjkdfjkdsjkfdjsnfjkdsnfjkdsnfjkndfjdsfnjkdsnjkdsnfjndn",
+    link: "#",
     date: "2025-06-22",
   },
   {
@@ -44,8 +48,9 @@ export const prReviews: PRReviewDataType[] = [
     repo: "company/payments-gateway",
     title: "Fix currency conversion bug",
     status: "Issues Found",
-    suggestions: 2,
-    link:"#",
+    suggestions:
+      "djdsfjsdfdsjkdjfjsdjfdjkfjkdfjkdsjkfdjsnfjkdsnfjkdsnfjkndfjdsfnjkdsnjkdsnfjndn",
+    link: "#",
     date: "2025-06-18",
   },
   {
@@ -53,8 +58,9 @@ export const prReviews: PRReviewDataType[] = [
     repo: "prninja/review-service",
     title: "Refactor AI comment generation",
     status: "Reviewed",
-    suggestions: 1,
-    link:"#",
+    suggestions:
+      "djdsfjsdfdsjkdjfjsdjfdjkfjkdfjkdsjkfdjsnfjkdsnfjkdsnfjkndfjdsfnjkdsnjkdsnfjndn",
+    link: "#",
     date: "2025-06-17",
   },
 ];
@@ -81,7 +87,9 @@ const Reviews = () => {
               <TableCell>{item.repo}</TableCell>
               <TableCell>{item.title}</TableCell>
               <TableCell className="">{item.status}</TableCell>
-              <TableCell className="text-center">{item.suggestions}</TableCell>
+              <TableCell className="text-center">
+                <Modal data={item.suggestions} />
+              </TableCell>
               <TableCell className="text-center">
                 <a
                   className="flex justify-center"

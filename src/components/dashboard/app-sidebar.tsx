@@ -1,3 +1,5 @@
+"use client";
+
 import { GitPullRequest, User, Workflow } from "lucide-react";
 
 import {
@@ -16,17 +18,18 @@ import Image from "next/image";
 import Link from "next/link";
 import Logout from "./Logout";
 import ThemeToggleButton from "../ThemeToggleButton";
+import { useSession } from "next-auth/react";
 
 const items = [
-  {
-    title: "PR Reviews",
-    url: "#pr-reviews",
-    icon: GitPullRequest,
-  },
   {
     title: "Integrations",
     url: "#integrations",
     icon: Workflow,
+  },
+  {
+    title: "PR Reviews",
+    url: "#pr-reviews",
+    icon: GitPullRequest,
   },
   {
     title: "Account",
@@ -36,6 +39,10 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const { data } = useSession();
+  if (!data?.user.email) {
+    return null;
+  }
   return (
     <Sidebar>
       <SidebarHeader className="mt-4 ml-2 mb-4">
@@ -75,6 +82,7 @@ export function AppSidebar() {
       <SidebarFooter className="my-4 ml-2 flex flex-row items-center gap-4">
         <Image
           src={
+            data.user.image ||
             "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740"
           }
           width={32}
@@ -82,7 +90,7 @@ export function AppSidebar() {
           alt="Profile pic"
           className="rounded-full"
         />
-        <h2>Name</h2>
+        <h2>{data.user.name}</h2>
       </SidebarFooter>
     </Sidebar>
   );
