@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "**.githubusercontent.com",
       },
+      {
+        protocol: "https",
+        hostname: "**.clerk.com",
+      },
     ],
   },
   // devIndicators: false

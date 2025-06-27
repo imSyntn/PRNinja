@@ -6,7 +6,17 @@ export interface PRReviewDataType {
   suggestions: string;
   link: string;
   date: string;
-};
+}
+
+export interface UserDataType {
+  email: string;
+  name: string;
+  plan: string;
+  installationId: number;
+  accountLogin: string;
+  accountId: number;
+  reviewPreference: string;
+}
 
 export type ConnectedRepoType = {
   id: number;

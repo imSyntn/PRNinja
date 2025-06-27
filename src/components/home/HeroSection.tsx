@@ -12,9 +12,8 @@ const HeroSection = () => {
 
       <TailwindGradiwntButton
         text="🚀 Now available on GitHub Apps"
-        as="a"
         href="https://github.com/apps/pr-ninja"
-        className=""
+        className="cursor-default"
       />
       <h1 className="text-7xl font-bold text-center">
         Code <span className="animated-text">Reviews,</span>

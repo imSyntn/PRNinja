@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               Int         @id @default(autoincrement())
+  email            String      @unique
+  name             String?
+  pic              String      @default("https://res.cloudinary.com/dqn1hcl8c/image/upload/v1750957242/profile_bmnjki.gif")
+  plan             String      @default("Free")
+  installationId   Int         @default(0)
+  accountLogin     String      @default("0")
+  accountId        Int         @unique @default(autoincrement())
+  reviewPreference String      @default("auto")
+  createdAt        DateTime    @default(now())
+  PR_Review        PR_Review[]
+}
+
+model PR_Review {
+  id          Int      @id @default(autoincrement())
+  author      User     @relation(fields: [userId], references: [id])
+  userId      Int
+  repo        String
+  title       String
+  status      String
+  suggestions String
+  date        DateTime @default(now())
+}

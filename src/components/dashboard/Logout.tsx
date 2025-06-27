@@ -3,20 +3,21 @@
 import React from "react";
 import { SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
 import { ArrowLeft } from "lucide-react";
-import { signOut, useSession } from "next-auth/react";
+import { SignOutButton, useUser } from "@clerk/nextjs";
+
 
 const Logout = () => {
-  const { status } = useSession();
-  if (status !== "authenticated") {
-    return null;
-  }
+  const { isLoaded } = useUser();
+  if (!isLoaded) return null;
   return (
     <SidebarMenuItem className="my-1">
       <SidebarMenuButton asChild className="text-base">
-        <button onClick={() => signOut({ callbackUrl: "/" })}>
-          <ArrowLeft />
-          <span>Sign out</span>
-        </button>
+        <SignOutButton>
+          <button>
+            <ArrowLeft />
+            <span>Sign out</span>
+          </button>
+        </SignOutButton>
       </SidebarMenuButton>
     </SidebarMenuItem>
   );

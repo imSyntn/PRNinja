@@ -5,34 +5,40 @@ import { Button } from "../ui/button";
 import Image from "next/image";
 import AlertButton from "./AlertButton";
 import { Badge } from "../ui/badge";
-import { Session } from "next-auth";
+import type { UserResource } from "@clerk/types";
+import { UserDataType } from "@/types/dashboard";
 
-const Account = ({ data }: { data: Session }) => {
-
+const Account = ({
+  basicData,
+  userData,
+}: {
+  basicData: UserResource;
+  userData: UserDataType;
+}) => {
   return (
     <div id="account" className="my-10 h-full">
       <h2 className="text-2xl font-bold mb-5">Account</h2>
       <h3 className="text-xl font-semibold my-4 ml-3">Profile</h3>
-      <div className="flex gap-10 flex-wrap ml-6">
-        <div className="">
-          <Image
-            src={
-              data.user.image ||
-              "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740"
-            }
-            width={100}
-            height={100}
-            alt="Profile pic"
-            className="rounded-full mb-2.5"
-          />
-          <Button className="cursor-pointer">Change Pic</Button>
-        </div>
+      <div className="flex items-center gap-10 flex-wrap ml-6">
+        <Image
+          src={
+            basicData.imageUrl ||
+            "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740"
+          }
+          width={122}
+          height={122}
+          alt="Profile pic"
+          className="rounded-full"
+        />
         <div className="flex flex-col justify-between">
           <Label htmlFor="email" className="my-2">
             Name:
           </Label>
           <div className="flex w-full max-w-sm items-center gap-3">
-            <Input type="text" placeholder={data.user.name || "Add name."} />
+            <Input
+              type="text"
+              placeholder={basicData.fullName || "Add name."}
+            />
             <Button type="submit" variant="outline" className="cursor-pointer">
               Change
             </Button>
@@ -44,7 +50,7 @@ const Account = ({ data }: { data: Session }) => {
             type="email"
             disabled
             id="email"
-            placeholder={data.user.email || ""}
+            placeholder={basicData.emailAddresses[0].emailAddress || ""}
             className="max-w-sm"
           />
         </div>
@@ -59,19 +65,21 @@ const Account = ({ data }: { data: Session }) => {
           variant="secondary"
           className="bg-[#FFBF26] text-black font-bold"
         >
-          Free
+          {userData.plan}
         </Badge>
       </p>
-      <Button className="ml-6 cursor-pointer bg-gradient-to-r from-teal-400 to-yellow-200 text-black animated-button ">
-        Upgrade to PRO 🚀
-      </Button>
+      {userData.plan === "Free" && (
+        <Button className="ml-6 cursor-pointer bg-gradient-to-r from-teal-400 to-yellow-200 text-black animated-button ">
+          Upgrade to PRO 🚀
+        </Button>
+      )}
 
       {/*  */}
 
       <h3 className="text-xl font-semibold mt-9 mb-4 ml-3">Danger Zone</h3>
       <div className="flex items-center">
         <p className="ml-6 mb-2">Delete My Account</p>
-        <AlertButton />
+        <AlertButton data={basicData} />
       </div>
     </div>
   );

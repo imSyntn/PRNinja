@@ -4,8 +4,14 @@ import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
-export default function ReviewPreference() {
-  const [reviewPreference, setReviewPreference] = useState<string>("auto");
+export default function ReviewPreference({
+  currentReviewPreference,
+}: {
+  currentReviewPreference: string;
+}) {
+  const [reviewPreference, setReviewPreference] = useState<string>(
+    currentReviewPreference || "auto"
+  );
   return (
     <div className="flex flex-col gap-6 my-10">
       <h2 className="text-2xl font-bold">Review preference</h2>

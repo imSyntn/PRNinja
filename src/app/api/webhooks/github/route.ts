@@ -16,6 +16,7 @@ export async function POST(request: NextRequest) {
 
     if (event === "installation" && payload.action === "created") {
       // dbCall()
+      // Prisma.user.
     }
 
     if (
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ msg: reviewResult }, { status: 200 });
     }
 
-    // issue_comment 🔥🔥🔥🔥
+    // issue_comment (ommited) 🔥🔥🔥🔥
 
     if (
       event === "pull_request_review_comment" &&
