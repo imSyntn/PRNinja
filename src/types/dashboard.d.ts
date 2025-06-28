@@ -2,7 +2,8 @@ export interface PRReviewDataType {
   id: string;
   repo: string;
   title: string;
-  status: "Reviewed" | "Issues Found" | "Pending";
+  filesChanged: number;
+  status: string;
   suggestions: string;
   link: string;
   date: string;

@@ -20,6 +20,7 @@ import Logout from "./Logout";
 import ThemeToggleButton from "../ThemeToggleButton";
 import { useUser } from "@clerk/nextjs";
 import Loading from "@/app/loading";
+import { Caveat } from "next/font/google";
 
 
 const items = [
@@ -40,6 +41,11 @@ const items = [
   },
 ];
 
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
+
 export function AppSidebar() {
 
   const {isLoaded, isSignedIn, user} = useUser()
@@ -50,8 +56,14 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader className="mt-4 ml-2 mb-4">
-        <h1 className="text-xl font-extrabold tracking-wider">PR Ninja</h1>
+      <SidebarHeader className="flex flex-row items-center mt-4 ml-2 mb-4">
+        <img
+          src="https://res.cloudinary.com/dqn1hcl8c/image/upload/v1751140356/PR_Ninja_1_vmyh2o.png"
+          width={50}
+          height={50}
+          alt="Logo"
+        />
+        <h1 className={`${caveat.className} text-3xl font-extrabold tracking-wider`}>PR Ninja</h1>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>

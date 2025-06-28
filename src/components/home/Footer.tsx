@@ -1,142 +1,72 @@
-import { Code, Github, Linkedin, Mail, Twitter } from "lucide-react";
-import React from "react";
-import { Button } from "../ui/button";
+import { IconBrandX } from "@tabler/icons-react";
+import { Github, Heart, Linkedin } from "lucide-react";
+import { Caveat } from "next/font/google";
+
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-4 gap-8 mb-8">
-          <div className="md:col-span-2">
-            <div className="flex items-center mb-4">
-              <Code className="w-8 h-8 text-indigo-400 mr-3" />
-              <span className="text-xl font-bold">PR Ninja</span>
-            </div>
-            <p className="text-gray-400 mb-6 max-w-md">
-              Revolutionizing code reviews with artificial intelligence. Helping
-              to code better, faster.
-            </p>
-            <div className="flex space-x-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-gray-400 hover:text-white p-2"
-              >
-                <Twitter className="w-5 h-5" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-gray-400 hover:text-white p-2"
-              >
-                <Github className="w-5 h-5" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-gray-400 hover:text-white p-2"
-              >
-                <Linkedin className="w-5 h-5" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-gray-400 hover:text-white p-2"
-              >
-                <Mail className="w-5 h-5" />
-              </Button>
-            </div>
-          </div>
-          <div>
-            <h4 className="font-semibold mb-4">Product</h4>
-            <ul className="space-y-2 text-gray-400">
-              <li>
-                <a
-                  href="#how-it-works"
-                  className="hover:text-white transition-colors"
-                >
-                  How It Works
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#feature-section"
-                  className="hover:text-white transition-colors"
-                >
-                  Features
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#pricing-section"
-                  className="hover:text-white transition-colors"
-                >
-                  Pricing
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  API
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Documentation
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-semibold mb-4">Company</h4>
-            <ul className="space-y-2 text-gray-400">
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  About
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Careers
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Contact
-                </a>
-              </li>
-            </ul>
-          </div>
+    <footer id="contact" className="w-full p-5 sm:px-24 mt-12 my-6 flex flex-wrap items-center justify-between gap-3">
+      <div className="flex items-center gap-2">
+        <img
+          src="https://res.cloudinary.com/dqn1hcl8c/image/upload/v1751140356/PR_Ninja_1_vmyh2o.png"
+          width={50}
+          height={50}
+          alt="Logo"
+        />
+        <h1 className={`${caveat.className} text-3xl sm:text-5xl font-bold`}>PR Ninja</h1>
+      </div>
+      <div className="flex flex-col items-end custom:w-full">
+        <div className="flex space-x-4">
+          <a
+            href="https://github.com/imSyntn/Link-Leaf"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Visit Github"
+          >
+            <Github size={30} className="text-gray-500 hover:text-white transition-all duration-300" />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/imsyntn/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Visit Linkedin"
+          >
+            <Linkedin size={30} className="text-gray-500 hover:text-white text-[35px] transition-all duration-300" />
+          </a>
+          <a
+            href="https://twitter.com/imSyntn"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Visit Twitter"
+          >
+            <IconBrandX size={30} stroke={2} className="text-gray-500 hover:text-white text-[35px] transition-all duration-300" />
+          </a>
+          <a
+            href="https://github.com/sponsors/imSyntn"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Be a sponsor."
+          >
+            <Heart size={30} className="text-gray-500 hover:text-red-400 text-[35px] transition-all duration-300" />
+          </a>
         </div>
-        <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400 text-sm">
-            © 2025 PR Ninja. All rights reserved.
-          </p>
-          <div className="flex space-x-6 mt-4 md:mt-0">
-            <a
-              href="#"
-              className="text-gray-400 hover:text-white text-sm transition-colors"
-            >
-              Privacy Policy
-            </a>
-            <a
-              href="#"
-              className="text-gray-400 hover:text-white text-sm transition-colors"
-            >
-              Terms of Service
-            </a>
-            <a
-              href="#"
-              className="text-gray-400 hover:text-white text-sm transition-colors"
-            >
-              Cookie Policy
-            </a>
-          </div>
-        </div>
+        <p className="text-gray-100 text-right text-lg mt-2">
+          Website by{" "}
+          <a
+            href="https://twitter.com/imSyntn"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-clip-text text-transparent bg-gradient-to-t from-[#b3ffab] to-[#12fff7]"
+          >
+            {" "}
+            @imSyntn{" "}
+          </a>
+        </p>
       </div>
     </footer>
   );

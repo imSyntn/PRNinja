@@ -2,6 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { runAIReview } from "@/app/services/codeReview";
 import { prisma } from "@/app/lib/prisma";
 
+const checkUser = async (installationId: number) => {
+  const userAuthenticated = await prisma.user.findFirst({
+    where: { installationId },
+  });
+
+  return userAuthenticated;
+};
+
 export async function POST(request: NextRequest) {
   const payload = await request.json();
   const event = request.headers.get("x-github-event");
@@ -13,15 +21,13 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    // console.log('🔥🔥🔥🔥', payload.action)
-
     if (event === "installation" && payload.action === "created") {
-      console.log(payload.installation.account.id)
+      console.log(payload.installation.account.id);
       await prisma.user.update({
         where: { accountId: `${payload.installation.account.id}` },
         data: {
           installationId: payload.installation.id,
-          accountLogin: payload.installation.account.login
+          accountLogin: payload.installation.account.login,
         },
       });
     }
@@ -32,19 +38,32 @@ export async function POST(request: NextRequest) {
     ) {
       const { installation, pull_request, repository } = payload;
 
-      // console.log("PR Opened or Synced:",{ installation, pull_request, repository });
+      const userAuthenticated = await checkUser(installation.id);
+
+      if (!userAuthenticated) {
+        return NextResponse.json(
+          { msg: "User is not registered." },
+          { status: 400 }
+        );
+      }
+
+      if (userAuthenticated.reviewPreference != "auto") {
+        return NextResponse.json(
+          { msg: "Manual review preference is selected." },
+          { status: 422 }
+        );
+      }
 
       const reviewResult = await runAIReview({
         installationID: installation.id,
         owner: repository.owner.login,
         repo: repository.name,
         pull_number: pull_request.number,
+        userId: userAuthenticated.id,
       });
 
       return NextResponse.json({ msg: reviewResult }, { status: 200 });
     }
-
-    // issue_comment (removed) 🔥🔥🔥🔥
 
     if (
       event === "pull_request_review_comment" &&
@@ -59,11 +78,28 @@ export async function POST(request: NextRequest) {
           repository,
         });
 
+        const userAuthenticated = await checkUser(installation.id);
+
+        if (!userAuthenticated) {
+          return NextResponse.json(
+            { msg: "User is not registered." },
+            { status: 400 }
+          );
+        }
+
+        if (userAuthenticated.reviewPreference != "manual") {
+          return NextResponse.json(
+            { msg: "Auto review preference is selected." },
+            { status: 422 }
+          );
+        }
+
         const reviewResult = await runAIReview({
           installationID: installation.id,
           owner: repository.owner.login,
           repo: repository.name,
           pull_number: pull_request.number,
+          userId: userAuthenticated.id,
         });
 
         return NextResponse.json({ msg: reviewResult }, { status: 200 });

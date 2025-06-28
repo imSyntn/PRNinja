@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import MarkdownViewer from "./MarkdownViewer";
 
-export default function Modal({ data }: { data: string }) {
+export default function Modal({ content }: { content: string }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -26,7 +26,7 @@ export default function Modal({ data }: { data: string }) {
         </DialogHeader>
 
         <div className="h-full overflow-auto p-4">
-          <MarkdownViewer />
+          <MarkdownViewer content={content} />
         </div>
 
         <DialogFooter className="mt-4 h-[20px]">

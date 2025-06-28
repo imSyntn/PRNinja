@@ -25,7 +25,7 @@ const ThemeToggleButton = ({
 
   return (
     <Button
-      variant="ghost"
+      variant="outline"
       size={size ? size : "icon"}
       className={`cursor-pointer ${className}`}
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}

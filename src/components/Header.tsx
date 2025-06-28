@@ -21,7 +21,7 @@ const navItems = [
   { name: "How It Works", link: "#how-it-works" },
   { name: "Features", link: "#feature-section" },
   { name: "Pricing", link: "#pricing-section" },
-  { name: "Contact", link: "/contact" },
+  { name: "Contact", link: "#contact" },
 ];
 
 export default function Header() {
@@ -40,7 +40,7 @@ export default function Header() {
         <NavItems items={navItems} />
 
         <div className="flex items-center space-x-2">
-          <NavbarButton variant="secondary">
+          <NavbarButton variant="secondary" className="px-0">
             <ThemeToggleButton />
           </NavbarButton>
           <NavbarButton href="/get-started" variant="primary" as={Link}>
@@ -60,17 +60,17 @@ export default function Header() {
 
         <MobileNavMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)}>
           {navItems.map((item, idx) => (
-            <a
+            <Link
               key={idx}
-              href={item.link}
+              href={`/${item.link}`}
               onClick={() => setMenuOpen(false)}
               className="text-black dark:text-white"
             >
               {item.name}
-            </a>
+            </Link>
           ))}
           <div className="flex">
-            <NavbarButton variant="secondary" className="py-0">
+            <NavbarButton variant="secondary" className="pl-0 py-0">
               <ThemeToggleButton />
             </NavbarButton>
             <NavbarButton href="/get-started" variant="primary" as={Link}>

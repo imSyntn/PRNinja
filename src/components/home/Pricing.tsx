@@ -58,15 +58,16 @@ const Pricing = () => {
       className="min-h-[100vh] w-full flex flex-col justify-center items-center gap-10 px-12"
     >
       <div className="w-full text-center mb-10">
-        <h2 className="text-5xl font-bold mb-5">Simple, transparent pricing</h2>
-        <p className="text-2xl">
+        <h2 className="text-4xl sm:text-5xl font-bold mb-5">Pricing</h2>
+        {/* <p className="text-2xl">
           Choose the plan that fits your team size and needs.
-        </p>
+        </p> */}
       </div>
       <div className="w-full flex justify-evenly flex-wrap gap-2.5 gap-y-9">
-        {pricingPlans.map((plan) => (
+        <h1 className="text-5xl sm:text-7xl font-bold text-center animated-text">Free for all.</h1>
+        {/* {pricingPlans.map((plan) => (
           <PricingCard key={plan.id} plan={plan} />
-        ))}
+        ))} */}
       </div>
     </div>
   );

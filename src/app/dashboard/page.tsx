@@ -69,9 +69,9 @@ const Dashboard = () => {
         email={user.emailAddresses[0].emailAddress}
       />
       <Separator />
-      {/* <Integrations userData={userData} /> */}
+      <Integrations userData={userData} />
       <Separator />
-      {/* <Reviews id={userData.id} /> */}
+      <Reviews id={userData.id} />
       <Separator />
       <Account basicData={user} userData={userData} />
       <footer className="flex justify-center mt-10 mb-2.5">

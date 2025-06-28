@@ -29,12 +29,14 @@ model User {
 }
 
 model PR_Review {
-  id          Int      @id @default(autoincrement())
-  author      User     @relation(fields: [userId], references: [id])
-  userId      Int
-  repo        String
-  title       String
-  status      String
-  suggestions String
-  date        DateTime @default(now())
+  id           Int      @id @default(autoincrement())
+  author       User     @relation(fields: [userId], references: [id])
+  userId       Int
+  title        String
+  filesChanged Int
+  repo         String
+  link         String
+  status       String
+  suggestions  String
+  date         DateTime @default(now())
 }

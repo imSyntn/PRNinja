@@ -71,7 +71,7 @@ export const getPRDiff = async ({
 
     console.log("🔥🔥 \n", diff);
     console.log("✅ Diff Got.");
-    return diff;
+    return {diff, PR_Data};
   } catch (error: any) {
     console.error("❌ Error fetching PR diff:", error.message); // 🔄 consistent error log
     throw error;
