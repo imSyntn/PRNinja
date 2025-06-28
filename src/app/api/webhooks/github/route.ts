@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { runAIReview } from "@/app/services/codeReview";
+import { prisma } from "@/app/lib/prisma";
 
 export async function POST(request: NextRequest) {
   const payload = await request.json();
@@ -15,8 +16,14 @@ export async function POST(request: NextRequest) {
     // console.log('🔥🔥🔥🔥', payload.action)
 
     if (event === "installation" && payload.action === "created") {
-      // dbCall()
-      // Prisma.user.
+      console.log(payload.installation.account.id)
+      await prisma.user.update({
+        where: { accountId: `${payload.installation.account.id}` },
+        data: {
+          installationId: payload.installation.id,
+          accountLogin: payload.installation.account.login
+        },
+      });
     }
 
     if (
@@ -37,7 +44,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ msg: reviewResult }, { status: 200 });
     }
 
-    // issue_comment (ommited) 🔥🔥🔥🔥
+    // issue_comment (removed) 🔥🔥🔥🔥
 
     if (
       event === "pull_request_review_comment" &&

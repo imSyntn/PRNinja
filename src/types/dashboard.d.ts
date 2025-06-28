@@ -9,6 +9,7 @@ export interface PRReviewDataType {
 }
 
 export interface UserDataType {
+  id: number;
   email: string;
   name: string;
   plan: string;

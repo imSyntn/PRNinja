@@ -3,18 +3,24 @@ import { prisma } from "@/app/lib/prisma";
 
 export async function POST(request: NextRequest) {
   try {
-    const {
-      type,
-      data: {
-        first_name,
-        image_url,
-        last_name,
-        email_addresses: [{ email_address }],
-      },
-    } = await request.json();
+    const { type, data } = await request.json();
 
     if (type !== "user.created") {
       return NextResponse.json({ msg: "Invalid Webhook." }, { status: 400 });
+    }
+
+    console.log("clerk webhook triggered.");
+
+    const {
+      first_name,
+      image_url,
+      last_name,
+      email_addresses: [{ email_address }],
+      external_accounts: [{ provider_user_id }],
+    } = data;
+
+    if(!provider_user_id || !email_address) {
+      return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
     }
 
     try {
@@ -23,6 +29,7 @@ export async function POST(request: NextRequest) {
           email: email_address,
           name: first_name + " " + last_name,
           pic: image_url,
+          accountId: provider_user_id,
         },
       });
 
@@ -33,6 +40,6 @@ export async function POST(request: NextRequest) {
     }
   } catch (err) {
     console.error("Webhook Error:", err);
-    return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+    return NextResponse.json({ error: "Invalid payload" }, { status: 500 });
   }
 }

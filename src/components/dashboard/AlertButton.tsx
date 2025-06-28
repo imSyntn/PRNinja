@@ -11,9 +11,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "../ui/button";
-import axios from "axios";
 import type { UserResource } from "@clerk/types";
-import { toast } from "sonner";
 
 const defaultText = "Delete";
 const defaultDescription =
@@ -23,30 +21,14 @@ const AlertButton = ({
   text = defaultText,
   description = defaultDescription,
   data,
+  onClick
 }: {
   text?: string;
   description?: string;
-  data: UserResource;
+  data?: UserResource;
+  onClick?: ()=> void
 }) => {
-  const handleDelete = async () => {
-    try {
-      const res = await axios.delete("/api/user/delete", {
-        data: {
-          userId: data.id,
-        },
-      });
 
-      if (res.status === 200) {
-        toast("Account deleted successfully.");
-        return;
-      } else {
-        toast("Error occured.");
-      }
-    } catch (error) {
-      toast("Error occured.");
-      console.log(error);
-    }
-  };
 
   return (
     <AlertDialog>
@@ -71,7 +53,7 @@ const AlertButton = ({
               variant="outline"
               className="text-red-400 hover:text-red-500 ml-4 cursor-pointer"
               size="sm"
-              onClick={handleDelete}
+              onClick={onClick}
             >
               {text}
             </Button>

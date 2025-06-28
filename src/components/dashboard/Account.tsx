@@ -7,6 +7,8 @@ import AlertButton from "./AlertButton";
 import { Badge } from "../ui/badge";
 import type { UserResource } from "@clerk/types";
 import { UserDataType } from "@/types/dashboard";
+import axios from "axios";
+import { toast } from "sonner";
 
 const Account = ({
   basicData,
@@ -15,6 +17,28 @@ const Account = ({
   basicData: UserResource;
   userData: UserDataType;
 }) => {
+  const handleDeleteUser = async () => {
+    try {
+      const res = await axios.delete("/api/user", {
+        data: {
+          userId: basicData.id,
+        },
+      });
+
+      if (res.status === 200) {
+        toast("Account deleted successfully.");
+        // router.push('/get-started');
+        return;
+      } else {
+        toast("Error occured.");
+      }
+    } catch (error) {
+      toast("Error occured.");
+      console.log(error);
+      return;
+    }
+  };
+
   return (
     <div id="account" className="my-10 h-full">
       <h2 className="text-2xl font-bold mb-5">Account</h2>
@@ -63,7 +87,7 @@ const Account = ({
         Plan:{" "}
         <Badge
           variant="secondary"
-          className="bg-[#FFBF26] text-black font-bold"
+          className="bg-linear-to-r from-gray-300 via-yellow-500 to-amber-400 text-black font-bold"
         >
           {userData.plan}
         </Badge>
@@ -79,7 +103,7 @@ const Account = ({
       <h3 className="text-xl font-semibold mt-9 mb-4 ml-3">Danger Zone</h3>
       <div className="flex items-center">
         <p className="ml-6 mb-2">Delete My Account</p>
-        <AlertButton data={basicData} />
+        <AlertButton onClick={handleDeleteUser} />
       </div>
     </div>
   );

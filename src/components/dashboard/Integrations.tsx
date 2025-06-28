@@ -9,81 +9,101 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "../ui/button";
-import { ConnectedRepoType } from "@/types/dashboard";
+import { ConnectedRepoType, UserDataType } from "@/types/dashboard";
 import { ExternalLink } from "lucide-react";
 import { Badge } from "../ui/badge";
 import AlertButton from "./AlertButton";
+import { useFetch } from "@/hooks/useFetch";
 
-const data: ConnectedRepoType[] = [
-  {
-    id: 1296269,
-    name: "Hello-World",
-    description: "This your first repo!",
-    full_name: "octocat/Hello-World",
-    permissions: {
-      pulls: "write",
-      metadata: "read",
-    },
-    private: true,
-  },
-  {
-    id: 1296270,
-    name: "Another-Repo",
-    description: "This your first repo!",
-    full_name: "octocat/Another-Repo",
-    permissions: {
-      pulls: "read",
-      metadata: "read",
-    },
-    private: false,
-  },
-];
+const RenderTable = ({
+  repo,
+  onClick,
+}: {
+  repo: ConnectedRepoType[];
+  onClick: () => void;
+}) => {
+  return (
+    <Table>
+      <TableCaption>A list of your connected repositories.</TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Name</TableHead>
+          <TableHead>description</TableHead>
+          <TableHead className="text-center">Private</TableHead>
+          <TableHead className="text-center">Link</TableHead>
+          <TableHead className="text-right w-28"> </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {repo.map((item) => (
+          <TableRow key={item.id}>
+            <TableCell>{item.name}</TableCell>
+            <TableCell>{item.description || "No description."}</TableCell>
+            <TableCell className="text-center">
+              <Badge>{item.private.toString()}</Badge>
+            </TableCell>
+            <TableCell className="text-center">
+              <a
+                className="flex justify-center"
+                href={`https://github.com/${item.full_name}`}
+                target="_blank"
+              >
+                <ExternalLink color="#155dfc" />
+              </a>
+            </TableCell>
+            <TableCell className="text-right w-28">
+              <AlertButton
+                text="Disconnect"
+                description="If disconnected, you can connect the repository again."
+                onClick={onClick}
+              />
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+};
 
-const Integrations = () => {
+const Integrations = ({ userData }: { userData: UserDataType }) => {
+  const { data, loading, error } = useFetch(
+    `/api/user/integrations?installationId=${userData.installationId}`
+  );
+
+  console.log({ data, loading, error });
+
+  const handleDisconnectRepo = () => {
+    const url = `https://github.com/settings/installations/${userData.installationId}`
+    window.open(url, "_blank")
+  };
+
   return (
     <div id="integrations" className="my-10 h-full">
       <h2 className="text-2xl font-bold mb-5">Integrations</h2>
-      <h3 className="text-xl font-semibold my-4">
-        Connected Repositories
-      </h3>
-      <Table>
-        <TableCaption>A list of your recent connected repositories.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>description</TableHead>
-            <TableHead className="text-center">Private</TableHead>
-            <TableHead className="text-center">Link</TableHead>
-            <TableHead className="text-right w-28"> </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell>{item.name}</TableCell>
-              <TableCell>{item.description}</TableCell>
-              <TableCell className="text-center">
-                <Badge>{item.private.toString()}</Badge>
-              </TableCell>
-              <TableCell className="text-center">
-                <a
-                  className="flex justify-center"
-                  href={`https://github.com/${item.full_name}`}
-                  target="_blank"
-                >
-                  <ExternalLink color="#155dfc" />
-                </a>
-              </TableCell>
-              <TableCell className="text-right w-28">
-                <AlertButton text="Disconnect" description="If disconnected, you can connect the repository again." />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <div className="w-full flex justify-center my-5">
-        <Button size="sm" className="cursor-pointer">Connect New Repository</Button>
-      </div>
+      <h3 className="text-xl font-semibold my-4">Connected Repositories</h3>
+      {!loading && !error && data ? (
+        <>
+          {data.data.total_count !== 0 ? (
+            <RenderTable
+              repo={data.data.repositories}
+              onClick={handleDisconnectRepo}
+            />
+          ) : (
+            <p className="text-center my-5">No repositories added.</p>
+          )}
+          {data.data.repository_selection !== "all" && (
+            <div className="w-full flex justify-center my-5">
+              <Button size="sm" className="cursor-pointer">
+                Connect New Repository
+              </Button>
+            </div>
+          )}
+        </>
+      ) : loading && !error ? (
+        <p className="text-center my-5">Loading...</p>
+      ) : (
+        <p className="text-center my-5">Error</p>
+      )}
     </div>
   );
 };

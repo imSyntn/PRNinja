@@ -22,7 +22,7 @@ model User {
   plan             String      @default("Free")
   installationId   Int         @default(0)
   accountLogin     String      @default("0")
-  accountId        Int         @unique @default(autoincrement())
+  accountId        String      @unique
   reviewPreference String      @default("auto")
   createdAt        DateTime    @default(now())
   PR_Review        PR_Review[]

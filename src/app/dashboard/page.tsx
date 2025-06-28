@@ -13,23 +13,32 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { UserDataType } from "@/types/dashboard";
 import { toast } from "sonner";
+import { TailwindGradiwntButton } from "@/components/ui/button";
+
+const Separator = () => (
+  <div className="w-full border border-gray-300 dark:border-gray-600" />
+);
 
 const Dashboard = () => {
   const { user, isSignedIn, isLoaded } = useUser();
-  const [userData, setUserData] = useState<UserDataType | null>(null)
+  const [userData, setUserData] = useState<UserDataType | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     if (!isSignedIn) {
       router.push("/get-started");
     } else {
+      console.log(user);
       const email = user.emailAddresses[0].emailAddress;
 
-      axios.get("/api/user/get", { params: { email } }).then(e=> {
-        if(e.status === 200) {
-          setUserData(e.data)
-        }
-      }).catch((e) => toast("Error occurred."))
+      axios
+        .get("/api/user", { params: { email } })
+        .then((e) => {
+          if (e.status === 200) {
+            setUserData(e.data);
+          }
+        })
+        .catch((e) => toast("Error occurred."));
     }
   }, [isSignedIn, router]);
 
@@ -37,19 +46,35 @@ const Dashboard = () => {
     return <Loading />;
   }
 
+  if (userData.installationId === 0) {
+    return (
+      <div className="w-[100vw] h-[100vh] bg-black/90 fixed top-0 left-0 z-50 flex items-center justify-center">
+        <TailwindGradiwntButton
+          text="🚀 Install PR Ninja"
+          href="https://github.com/apps/pr-ninja"
+          className="cursor-pointer"
+          as="a"
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="w-full px-10">
       <h1 className="text-4xl">
         Welcome <span className="animated-text mr-1">{user?.firstName}</span>!
       </h1>
-      <ReviewPreference currentReviewPreference={userData.reviewPreference} />
+      <ReviewPreference
+        currentReviewPreference={userData.reviewPreference}
+        email={user.emailAddresses[0].emailAddress}
+      />
       <Separator />
-      <Integrations />
+      {/* <Integrations userData={userData} /> */}
       <Separator />
-      <Reviews />
+      {/* <Reviews id={userData.id} /> */}
       <Separator />
       <Account basicData={user} userData={userData} />
-      <footer className="flex justify-center mt-5 mb-2.5">
+      <footer className="flex justify-center mt-10 mb-2.5">
         <Minus color="#3d9900" />
         <CircleCheckBig color="#3d9900" />
         <Minus color="#3d9900" />
@@ -57,9 +82,5 @@ const Dashboard = () => {
     </div>
   );
 };
-
-const Separator = () => (
-  <div className="w-full border border-gray-300 dark:border-gray-600" />
-);
 
 export default Dashboard;
