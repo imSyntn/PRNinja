@@ -70,8 +70,6 @@ const Integrations = ({ userData }: { userData: UserDataType }) => {
     `/api/user/integrations?installationId=${userData.installationId}`
   );
 
-  console.log({ data, loading, error });
-
   const handleDisconnectRepo = () => {
     const url = `https://github.com/settings/installations/${userData.installationId}`
     window.open(url, "_blank")

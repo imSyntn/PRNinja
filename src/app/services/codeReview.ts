@@ -1,8 +1,82 @@
 import { getPRDiff, postPRComment } from "@/app/lib/github";
+import { PRReviewDataType } from "@/types/dashboard";
 import openai from "@/app/lib/Models/openai";
 import { NextResponse } from "next/server";
-import { prisma } from "../lib/prisma";
+import { prisma } from "@/app/lib/prisma";
+import { redis } from "@/app/lib/redis";
 // import Gemini from "../lib/Models/gemini";
+
+const getPreviousReviews = async (userId: string) => {
+  const cached: string | null = await redis.get(userId);
+
+  if (typeof cached === "string" && cached.trim() !== "") {
+    return JSON.parse(cached);
+  }
+
+  if (typeof cached === "object" && cached !== null) {
+    return cached;
+  }
+
+  const data = await prisma.pR_Review.findMany({
+    where: { userId: parseInt(userId) },
+    orderBy: { date: "desc" },
+  });
+
+  await redis.set(userId, JSON.stringify(data || []));
+  await redis.expire(userId, 604800);
+
+  return data;
+};
+
+const updateDB = async (
+  userId: number,
+  repo: string,
+  link: string,
+  title: string,
+  filesChanged: number,
+  status: string,
+  suggestions: string,
+  previousData: PRReviewDataType[]
+) => {
+  const updData = await prisma.pR_Review.create({
+    data: {
+      userId,
+      repo,
+      link,
+      title,
+      filesChanged,
+      status,
+      suggestions,
+    },
+  });
+
+  await redis.set(`${userId}`, JSON.stringify([updData, ...previousData]));
+  await redis.expire(`${userId}`, 604800);
+};
+
+const statusUpdate = async (
+  userId: number,
+  repo: string,
+  filesChanged: number,
+  status: string,
+  previousData: PRReviewDataType[]
+) => {
+  const currentStatus = {
+    userId,
+    repo,
+    link: "",
+    title: "",
+    filesChanged,
+    status,
+    suggestions: "",
+  };
+
+  await redis.set(
+    `${userId}`,
+    JSON.stringify([currentStatus, ...previousData])
+  );
+  await redis.expire(`${userId}`, 36000);
+};
 
 export const runAIReview = async ({
   installationID,
@@ -18,27 +92,52 @@ export const runAIReview = async ({
   userId: number;
 }) => {
   try {
-    console.log("🔃 Starting Review.");
+    const previousData = await getPreviousReviews(`${userId}`);
 
     if (!installationID || !owner || !repo || !pull_number) {
-      console.error("❌ Missing required parameters.");
+      await updateDB(
+        userId,
+        repo,
+        "",
+        "",
+        0,
+        "Failed",
+        "❌ Missing required parameter installationID or owner or repo or pull_number.",
+        previousData
+      );
       return NextResponse.json({ msg: "Invalid input" }, { status: 400 });
     }
 
-    const {diff, PR_Data} = await getPRDiff({ installationID, owner, repo, pull_number });
+    await statusUpdate(userId, repo, 0, "Getting diff.", previousData);
+
+    const { diff, PR_Data } = await getPRDiff({
+      installationID,
+      owner,
+      repo,
+      pull_number,
+    });
 
     if (!diff) {
-      console.error("❌ Failed to fetch PR diff.");
+      await updateDB(
+        userId,
+        repo,
+        "",
+        "",
+        0,
+        "Failed",
+        "❌ Failed to fetch PR diff.",
+        previousData
+      );
       return NextResponse.json(
         { msg: "Unable to fetch PR diff." },
         { status: 500 }
       );
     }
 
-    console.log("🔃 Calling API.");
+    await statusUpdate(userId, repo, 0, "Reviewing.", previousData);
 
     const systemPrompt =
-      "You are a senior code reviewer. Identify bugs, improvements, and security risks.";
+      "You are a senior code reviewer. Review the provided code diff for bugs, security risks, and improvements. Respond only with a numbered list of brief, actionable suggestions. If a code change is suggested, include the improved code inside a markdown-style codeblock using triple backticks (```). Do not include reasoning, explanations, or analysis.";
 
     const aiReview = await openai.chat.completions.create({
       //  🚀  OpenAI
@@ -71,10 +170,20 @@ export const runAIReview = async ({
     // const commentBody = aiReview.text;
 
     if (!commentBody) {
-      console.log("❌ API Result Error.");
+      await updateDB(
+        userId,
+        repo,
+        "",
+        PR_Data.title,
+        0,
+        "Failed",
+        "❌ API Result Error.",
+        previousData
+      );
       return NextResponse.json({ msg: "API Result Error." }, { status: 500 });
     }
-    console.log("✅ Result given by API.");
+
+    await statusUpdate(userId, repo, 0, "Commenting.", previousData);
 
     const comment = await postPRComment({
       installationID,
@@ -85,39 +194,50 @@ export const runAIReview = async ({
     });
 
     if (!comment.data.id) {
-      return NextResponse.json({ msg: "Error in comment" }, { status: 500 });
-    }
-
-    await prisma.pR_Review.create({
-      data: {
+      await updateDB(
         userId,
         repo,
-        link: comment.data.html_url,
-        title: PR_Data.title,
-        filesChanged: PR_Data.changed_files,
-        status: "Completed",
-        suggestions: commentBody,
-      },
-    });
+        "",
+        PR_Data.title,
+        0,
+        "Failed",
+        "❌Error in comment.",
+        previousData
+      );
+      return NextResponse.json({ msg: "Error in comment." }, { status: 500 });
+    }
 
-    console.log("✅ Review Completed.");
+    await updateDB(
+      userId,
+      repo,
+      comment.data.html_url,
+      PR_Data.title,
+      PR_Data.changed_files,
+      "Success",
+      commentBody,
+      previousData
+    );
+
     return { diffSize: diff.length, diff: diff, commentBody };
   } catch (error: any) {
     console.error(
       "🔥 Exception caught in runAIReview:",
       error.message || error
     );
-    await prisma.pR_Review.create({
-      data: {
-        userId,
-        repo,
-        link: "",
-        title: "",
-        filesChanged: 0,
-        status: "error",
-        suggestions: "",
-      },
-    });
+
+    const previousData = await getPreviousReviews(`${userId}`);
+
+    await updateDB(
+      userId,
+      repo,
+      "",
+      "",
+      0,
+      "Error",
+      "❌ Exception caught in Review.",
+      previousData
+    );
+
     return NextResponse.json({ msg: "Unexpected error." }, { status: 500 });
   }
 };

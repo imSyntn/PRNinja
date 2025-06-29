@@ -42,7 +42,7 @@ const Reviews = ({ id }: { id: number }) => {
             </TableHeader>
             <TableBody>
               {data.map((item) => (
-                <TableRow key={item.id}>
+                <TableRow key={item.id || "say4545"}>
                   <TableCell>{item.repo}</TableCell>
                   <TableCell>{item.title.slice(0, 15)}</TableCell>
                   <TableCell className="text-center">{item.filesChanged}</TableCell>
@@ -59,7 +59,7 @@ const Reviews = ({ id }: { id: number }) => {
                       <ExternalLink color="#155dfc" />
                     </a>
                   </TableCell>
-                  <TableCell className="text-right">{item.date}</TableCell>
+                  <TableCell className="text-right">{item.date ? new Date(item.date).toISOString().slice(0, 19).replace("T", " ") : "Current"}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

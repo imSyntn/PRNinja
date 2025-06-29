@@ -28,7 +28,6 @@ const Dashboard = () => {
     if (!isSignedIn) {
       router.push("/get-started");
     } else {
-      console.log(user);
       const email = user.emailAddresses[0].emailAddress;
 
       axios

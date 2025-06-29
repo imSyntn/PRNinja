@@ -61,11 +61,12 @@ const Account = ({
           <div className="flex w-full max-w-sm items-center gap-3">
             <Input
               type="text"
+              disabled
               placeholder={basicData.fullName || "Add name."}
             />
-            <Button type="submit" variant="outline" className="cursor-pointer">
+            {/* <Button type="submit" variant="outline" className="cursor-pointer">
               Change
-            </Button>
+            </Button> */}
           </div>
           <Label htmlFor="email" className="my-2">
             Email
@@ -84,19 +85,20 @@ const Account = ({
 
       <h3 className="text-xl font-semibold mt-9 mb-4 ml-3">Billing</h3>
       <p className="ml-6 mb-2">
-        Plan:{" "}
+        {/* Plan:{" "} */}
         <Badge
           variant="secondary"
-          className="bg-linear-to-r from-gray-300 via-yellow-500 to-amber-400 text-black font-bold"
+          className="bg-gradient-to-r from-teal-400 to-yellow-200 text-black font-bold"
         >
-          {userData.plan}
+          {/* {userData.plan} */}
+          Free for all.
         </Badge>
       </p>
-      {userData.plan === "Free" && (
+      {/* {userData.plan === "Free" && (
         <Button className="ml-6 cursor-pointer bg-gradient-to-r from-teal-400 to-yellow-200 text-black animated-button ">
           Upgrade to PRO 🚀
         </Button>
-      )}
+      )} */}
 
       {/*  */}
 

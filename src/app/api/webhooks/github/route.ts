@@ -1,11 +1,37 @@
 import { NextRequest, NextResponse } from "next/server";
 import { runAIReview } from "@/app/services/codeReview";
 import { prisma } from "@/app/lib/prisma";
+import { redis } from "@/app/lib/redis";
+
+export const userSelect = {
+  id: true,
+  email: true,
+  name: true,
+  pic: true,
+  plan: true,
+  installationId: true,
+  accountLogin: true,
+  accountId: true,
+  reviewPreference: true,
+};
 
 const checkUser = async (installationId: number) => {
+  const cached: any = await redis.hgetall(`${installationId}`);
+
+  if (cached && Object.keys(cached).length > 0) {
+    return cached;
+  }
+
   const userAuthenticated = await prisma.user.findFirst({
     where: { installationId },
+    select: userSelect,
   });
+
+  if (userAuthenticated) {
+    await redis.hset(`${installationId}`, userAuthenticated);
+    await redis.expire(`${installationId}`, 604800);
+
+  }
 
   return userAuthenticated;
 };
@@ -22,14 +48,21 @@ export async function POST(request: NextRequest) {
 
   try {
     if (event === "installation" && payload.action === "created") {
-      console.log(payload.installation.account.id);
-      await prisma.user.update({
+      const userData = await prisma.user.update({
         where: { accountId: `${payload.installation.account.id}` },
         data: {
           installationId: payload.installation.id,
           accountLogin: payload.installation.account.login,
         },
+        select: userSelect,
       });
+
+      await redis.hset(`${userData.installationId}`, userData);
+      await redis.hset(userData.email, userData);
+      await redis.expire(`${userData.installationId}`, 604800);
+      await redis.expire(userData.email, 604800);
+
+      return NextResponse.json({ msg: "Installation done." }, { status: 200 });
     }
 
     if (
@@ -71,12 +104,6 @@ export async function POST(request: NextRequest) {
     ) {
       if (/@pr[_ ]?ninja/i.test(payload.comment.body)) {
         const { installation, pull_request, repository } = payload;
-
-        console.log("Tagged Comment on PR:", {
-          installation,
-          pull_request,
-          repository,
-        });
 
         const userAuthenticated = await checkUser(installation.id);
 

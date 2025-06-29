@@ -5,7 +5,6 @@ const appId: string = process.env.APP_ID!;
 const privateKey: string = process.env.PRIVATE_KEY?.replace(/\\n/g, "\n")!;
 
 export const getInstallationToken = async (installationID: number) => {
-  console.log("🔃 Getting Token");
   try {
     const auth = createAppAuth({
       appId,
@@ -15,10 +14,9 @@ export const getInstallationToken = async (installationID: number) => {
       type: "installation",
       installationId: installationID,
     });
-    console.log("✅ Token generated");
     return token;
   } catch (error: any) {
-    console.error("❌ Failed to generate installation token:", error.message); // 🔄 better error logging
+    console.error("❌ Failed to generate installation token:", error.message);
     throw error;
   }
 };
@@ -35,7 +33,6 @@ export const getPRDiff = async ({
   pull_number: number;
 }) => {
   try {
-    console.log("🔃 Getting Diff");
     const token = await getInstallationToken(installationID);
 
     const { data: PR_Data } = await request(
@@ -51,7 +48,6 @@ export const getPRDiff = async ({
     );
 
     if (!PR_Data?.diff_url) {
-      // 🔄 validated diff_url presence
       throw new Error("Missing diff_url in PR data.");
     }
 
@@ -65,15 +61,11 @@ export const getPRDiff = async ({
     const diff = await diffResponse.text();
 
     if (!diff) {
-      // 🔄 validate empty diff
       throw new Error("Failed to fetch diff content.");
     }
-
-    console.log("🔥🔥 \n", diff);
-    console.log("✅ Diff Got.");
-    return {diff, PR_Data};
+    return { diff, PR_Data };
   } catch (error: any) {
-    console.error("❌ Error fetching PR diff:", error.message); // 🔄 consistent error log
+    console.error("❌ Error fetching PR diff:", error.message);
     throw error;
   }
 };
@@ -92,7 +84,6 @@ export const postPRComment = async ({
   body: string;
 }) => {
   try {
-    console.log("🔃 Posting PR comment.");
     const token = await getInstallationToken(installationID);
 
     const result = await request(
@@ -109,14 +100,12 @@ export const postPRComment = async ({
     );
 
     if (!result?.data?.id) {
-      // 🔄 check for missing comment id
       throw new Error("Comment failed, no comment ID returned.");
     }
 
-    console.log("✅ PR Comment added.");
     return result;
   } catch (error: any) {
-    console.error("❌ Error posting PR comment:", error.message); // 🔄 consistent error log
+    console.error("❌ Error posting PR comment:", error.message);
     throw error;
   }
 };
