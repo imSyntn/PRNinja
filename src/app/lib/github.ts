@@ -3,11 +3,11 @@ import { request } from "@octokit/request";
 
 const appId: string = process.env.APP_ID!;
 
-if (!process.env.PRIVATE_KEY) {
+if (!process.env.GITHUB_APP_PRIVATE_KEY) {
   throw new Error("PRIVATE_KEY is not defined in environment variables");
 }
 
-const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, "\n");
+const privateKey = process.env.GITHUB_APP_PRIVATE_KEY.replace(/\\n/g, "\n");
 
 export const getInstallationToken = async (installationID: number) => {
   try {
