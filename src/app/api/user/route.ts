@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/app/lib/prisma";
 import { clerkClient } from "@clerk/nextjs/server";
 import { redis } from "@/app/lib/redis";
-import { userSelect } from "../webhooks/github/route";
+import { userSelect } from "@/app/lib/constants";;
 
 export async function GET(request: NextRequest) {
   try {

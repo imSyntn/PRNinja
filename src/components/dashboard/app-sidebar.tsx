@@ -48,7 +48,7 @@ const caveat = Caveat({
 
 export function AppSidebar() {
 
-  const {isLoaded, isSignedIn, user} = useUser()
+  const {isLoaded, user} = useUser()
 
   if(!isLoaded) {
     return <Loading />

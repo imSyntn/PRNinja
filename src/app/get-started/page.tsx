@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  SignInButton,
-  UserButton,
-  useUser,
-  SignOutButton,
-} from "@clerk/nextjs";
+import { SignInButton, useUser } from "@clerk/nextjs";
 import React, { useEffect } from "react";
 import { RainbowButton } from "@/components/magicui/rainbow-button";
 import { useRouter } from "next/navigation";

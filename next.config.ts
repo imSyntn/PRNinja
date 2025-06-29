@@ -16,8 +16,7 @@ const nextConfig: NextConfig = {
         hostname: "**.clerk.com",
       },
     ],
-  },
-  // devIndicators: false
+  }
 };
 
 export default nextConfig;

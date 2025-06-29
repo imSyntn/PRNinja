@@ -37,7 +37,10 @@ const Dashboard = () => {
             setUserData(e.data);
           }
         })
-        .catch((e) => toast("Error occurred."));
+        .catch((e) => {
+          console.log(e)
+          toast("Error occurred.")
+        });
     }
   }, [isSignedIn, router]);
 
@@ -72,7 +75,7 @@ const Dashboard = () => {
       <Separator />
       <Reviews id={userData.id} />
       <Separator />
-      <Account basicData={user} userData={userData} />
+      <Account basicData={user} />
       <footer className="flex justify-center mt-10 mb-2.5">
         <Minus color="#3d9900" />
         <CircleCheckBig color="#3d9900" />

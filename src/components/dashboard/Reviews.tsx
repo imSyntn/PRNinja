@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { PRReviewDataType, UserDataType } from "@/types/dashboard";
+import { PRReviewDataType } from "@/types/dashboard";
 import { ExternalLink } from "lucide-react";
 import Modal from "./Modal";
 import { useFetch } from "@/hooks/useFetch";

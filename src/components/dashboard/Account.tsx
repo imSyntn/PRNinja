@@ -1,21 +1,17 @@
 import React from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { Button } from "../ui/button";
 import Image from "next/image";
 import AlertButton from "./AlertButton";
 import { Badge } from "../ui/badge";
 import type { UserResource } from "@clerk/types";
-import { UserDataType } from "@/types/dashboard";
 import axios from "axios";
 import { toast } from "sonner";
 
 const Account = ({
   basicData,
-  userData,
 }: {
   basicData: UserResource;
-  userData: UserDataType;
 }) => {
   const handleDeleteUser = async () => {
     try {

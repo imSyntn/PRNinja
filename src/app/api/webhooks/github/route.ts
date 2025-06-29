@@ -2,18 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { runAIReview } from "@/app/services/codeReview";
 import { prisma } from "@/app/lib/prisma";
 import { redis } from "@/app/lib/redis";
-
-export const userSelect = {
-  id: true,
-  email: true,
-  name: true,
-  pic: true,
-  plan: true,
-  installationId: true,
-  accountLogin: true,
-  accountId: true,
-  reviewPreference: true,
-};
+import { userSelect } from "@/app/lib/constants";
 
 const checkUser = async (installationId: number) => {
   const cached: any = await redis.hgetall(`${installationId}`);

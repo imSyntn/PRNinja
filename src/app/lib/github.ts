@@ -2,7 +2,12 @@ import { createAppAuth } from "@octokit/auth-app";
 import { request } from "@octokit/request";
 
 const appId: string = process.env.APP_ID!;
-const privateKey: string = process.env.PRIVATE_KEY?.replace(/\\n/g, "\n")!;
+
+if (!process.env.PRIVATE_KEY) {
+  throw new Error("PRIVATE_KEY is not defined in environment variables");
+}
+
+const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, "\n");
 
 export const getInstallationToken = async (installationID: number) => {
   try {

@@ -24,7 +24,7 @@ export default function ReviewPreference({
     toast("Updating review preference.");
     axios
       .put("/api/user", { email, updates: { reviewPreference } })
-      .then((e) => {
+      .then(() => {
         if(btnRef.current) {
           btnRef.current.style.display = "none";
         }

@@ -10,7 +10,29 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  {
+    ignores: ["src/generated/**", "src/components/magicui/*.tsx"],
+  },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    files: ["src/hooks/**/*.ts", "src/hooks/**/*.tsx"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "warn",
+      "prefer-spread": "error",
+    },
+  },
+  {
+    files: [
+      "src/app/api/**/*.ts",
+      "src/app/api/**/*.tsx",
+      "src/app/lib/**/*.ts",
+      "src/app/lib/**/*.tsx",
+      "src/app/services/**/*.ts",
+    ],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "warn",
+    },
+  },
 ];
 
 export default eslintConfig;

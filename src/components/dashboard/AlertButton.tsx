@@ -11,7 +11,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "../ui/button";
-import type { UserResource } from "@clerk/types";
+// import type { UserResource } from "@clerk/types";
 
 const defaultText = "Delete";
 const defaultDescription =
@@ -20,12 +20,10 @@ const defaultDescription =
 const AlertButton = ({
   text = defaultText,
   description = defaultDescription,
-  data,
   onClick
 }: {
   text?: string;
   description?: string;
-  data?: UserResource;
   onClick?: ()=> void
 }) => {
 
