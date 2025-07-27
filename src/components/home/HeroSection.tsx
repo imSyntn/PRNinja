@@ -29,7 +29,7 @@ const HeroSection = () => {
           <Link href="/get-started">Get Started</Link>
         </Button>
         <Button variant="outline" className="cursor-pointer">
-          View Demo
+          <Link href="https://www.linkedin.com/posts/imsyntn_technology-programming-softwaredevelopment-activity-7345200629688016896-yo08/" target="_blank">View Demo</Link>
         </Button>
       </div>
     </div>
