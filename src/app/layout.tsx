@@ -29,6 +29,16 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
+        <meta property="og:title" content="PR Ninja" />
+        <meta
+          property="og:description"
+          content="Code Reviews, Powered by AI."
+        />
+        <meta property="og:url" content="https://pr-ninja.sayantan.site/" />
+        <meta
+          property="og:image"
+          content="https://res.cloudinary.com/dqn1hcl8c/image/upload/v1751229991/PR_Ninja_xukjsr.jpg"
+        />
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
